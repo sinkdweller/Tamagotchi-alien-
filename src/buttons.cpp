@@ -1,4 +1,19 @@
 #include "buttons.h"
+struct Button {
+  const int pinNumber;
+  const char* label;
+  void (*action)();
+  unsigned long lastTime;
+  bool lastState; 
+  bool lastConfirmedState;
+  
+};
+
+Button userButtons[] = {
+{26, "LEFT", shiftMenuLeft, 0, HIGH, HIGH},
+{27, "RIGHT", shiftMenuRight, 0, HIGH, HIGH},
+{12, "SELECT", nullptr, 0, HIGH, HIGH}  
+};
 
 void setupButtons(int num){
   Serial.println("Setting up Buttons");

@@ -1,23 +1,12 @@
-
-#ifndef BUTTONS_H
-#define BUTTONS_H
+#pragma once
 
 #include <Arduino.h>
-
+#include "menu.h"
 //n BUTTONS TO ACTION MAPPING (PULLUP)
 
-struct Button {
-  const int pinNumber;
-  const char* label;
-  void (*action)();
-  unsigned long lastTime;
-  bool lastState; 
-  bool lastConfirmedState;
-  
-};
-
-extern Button userButtons[];
+extern void shiftMenuLeft();
+extern void shiftMenuRight();
 void setupButtons(int num);
 void checkButtons(unsigned long currentTime, int num);
 
-#endif
+
