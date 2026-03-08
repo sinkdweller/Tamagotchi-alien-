@@ -1,24 +1,22 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
-#include "images.h" // alien sprite data
+#include "actions.h"
+#include "sprites.h" // alien sprite data
 #include "backgrounds.h"
 #include "icons.h" //menu icon data
 #include "buttons.h"
-#define SCREEN_WIDTH  128
-#define SCREEN_HEIGHT 128
+#include "constants.h"
 
-// Optimized Pins for Elegoo ESP32 (Hardware SPI)
-//#define SCLK_PIN 18
-//#define MOSI_PIN 23 
+
 #define DC_PIN   2
-#define CS_PIN   5   // Changed from 0 to 5 for better stability
+#define CS_PIN   5   
 #define RST_PIN  4
 
 // Color definitions
 #define BLACK 0x0000
 
-// Initialize using Hardware SPI (Faster than software SPI)
+// Initialize using Hardware SPI 
 Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, CS_PIN, DC_PIN, RST_PIN);
 int center_x(int width){
   return (SCREEN_WIDTH - width)/2;
@@ -26,15 +24,21 @@ int center_x(int width){
 int center_y(int height){
   return (SCREEN_HEIGHT - height)/2;  
 }
-const int SPRITE_WIDTH = 64;
-const int SPRITE_HEIGHT = 64;
+
 const int INIT_SPRITE_Y_LOC = center_y(SPRITE_HEIGHT);
 int SPRITE_Y_LOC = INIT_SPRITE_Y_LOC;
 int SPRITE_X_LOC = center_x(SPRITE_WIDTH);
+
+
 const uint16_t* currentSprite;
+enum SPRITE_STATE{ 
+  STATE_IDLE,
+  STATE_EAT,
+  STATE_SLEEP,
+  STATE_EXCERCISE
 
-const int ICON_SIZE = 30;
-
+};
+SPRITE_STATE currentState;
 //this is a buffer
 GFXcanvas16 canvas(SCREEN_WIDTH, SCREEN_HEIGHT);
 void drawMenu();
@@ -59,43 +63,27 @@ void setup(void) {
   Serial.println("Pet rendered!");
 }
 
-const int BLINK_DURATION = 200;
-unsigned long lastBlinkTime = 0;
-bool isBlinking = false;
-int nextBlinkInterval=3000;
-bool facingRight = true;
 int yOffset=0;
-const int frameRate = 50;
-unsigned long lastFrameTime;
+unsigned long lastFrameTime=0;
 void loop() {  
 
   unsigned long currentTime = millis();
   checkButtons(currentTime, 3);
   
-  //start blink
-  if(!isBlinking && (currentTime - lastBlinkTime > nextBlinkInterval)){
-      isBlinking = true;
-      currentSprite = alien_right_blink;
-      lastBlinkTime = currentTime;
-  }
-  //unblink
-  if(isBlinking && (currentTime - lastBlinkTime > BLINK_DURATION)){
-      isBlinking = false;
-      currentSprite = alien_right_open;
-      nextBlinkInterval = random(3000,6000);
-      lastBlinkTime = currentTime;
-  }
-  //button logic
+  switch (currentState)
+    {
+      case STATE_IDLE:
+        blink_idle(currentTime);
+    }
   
   //DRAW SPRITE
-  if(currentTime - lastFrameTime > frameRate){
+  if(currentTime - lastFrameTime > FRAME_RATE){
     lastFrameTime = currentTime;
     float jiggle = sin(currentTime * 0.004) * 3; //+-  2 pixels
     // redraw background (to buffer)
     canvas.drawRGBBitmap(0, 0, alien_home, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     SPRITE_Y_LOC = INIT_SPRITE_Y_LOC + (int)jiggle;
-
     //redraw sprite (to buffer)
     canvas.drawRGBBitmap(SPRITE_X_LOC, SPRITE_Y_LOC, currentSprite, SPRITE_WIDTH, SPRITE_HEIGHT);
     //push buffer to screen

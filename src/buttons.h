@@ -4,6 +4,8 @@
 
 #include <Arduino.h>
 
+//n BUTTONS TO ACTION MAPPING (PULLUP)
+
 struct Button {
   const int pinNumber;
   const char* label;
