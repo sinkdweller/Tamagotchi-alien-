@@ -2,7 +2,7 @@
 struct Button {
   const int pinNumber;
   const char* label;
-  void (*action)();
+  //void (*action)();
   unsigned long lastTime;
   bool lastState; 
   bool lastConfirmedState;
@@ -10,9 +10,9 @@ struct Button {
 };
 
 Button userButtons[] = {
-{26, "LEFT", shiftMenuLeft, 0, HIGH, HIGH},
-{27, "RIGHT", shiftMenuRight, 0, HIGH, HIGH},
-{12, "SELECT", nullptr, 0, HIGH, HIGH}  
+{26, "LEFT",  0, HIGH, HIGH},
+{27, "RIGHT", 0, HIGH, HIGH},
+{12, "SELECT", 0, HIGH, HIGH}  
 };
 
 void setupButtons(int num){
@@ -22,7 +22,7 @@ void setupButtons(int num){
   }  
 }
 const int debounceTime = 50;
-void checkButtons(unsigned long currentTime, int num){
+int checkButtons(unsigned long currentTime, int num){
   for (int i = 0; i < num; i++){
     Button &button = userButtons[i];
     bool buttonState = digitalRead(button.pinNumber);
@@ -37,7 +37,7 @@ void checkButtons(unsigned long currentTime, int num){
       if(buttonState!= button.lastConfirmedState){
         button.lastConfirmedState = buttonState;
         if(buttonState==LOW){
-          button.action();
+          return i;
         }
         button.lastTime = currentTime;
         }
@@ -46,6 +46,7 @@ void checkButtons(unsigned long currentTime, int num){
 
     
   }
+  return -1;
   
   
 }

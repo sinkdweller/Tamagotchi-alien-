@@ -4,6 +4,7 @@
 #include "globals.h"
 #include <Arduino.h>
 extern const uint16_t* currentSprite;
+
 extern littleGuy alien;  
 void doBlink(int currentTime);
 void doRun(int currentTime);

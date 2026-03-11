@@ -6,9 +6,11 @@
 #include "backgrounds.h"
 #include "icons.h" //menu icon data
 #include "buttons.h"
+#include "home_screen/menu.h"
 #include "constants.h"
 #include "utils.h"
 #include "littleGuy.h"
+#include "home_screen/drawHome.h"
 #include "globals.h"
 #define DC_PIN   2
 #define CS_PIN   5   
@@ -42,31 +44,40 @@ void setup(void) {
   Serial.println("Pet rendered!");
 }
 
-int yOffset=0;
-unsigned long lastFrameTime=0;
+enum SCREENS {
+  HOME_SCREEN,
+  STAT_SCEEN
+};
+SCREENS currentScreen = HOME_SCREEN;
+
 
 void loop() {  
 
   unsigned long currentTime = millis();
-  checkButtons(currentTime, 3);
-  
-  switch (currentState)
-    {
+  int pressedButton = checkButtons(currentTime, 3);
+  switch(currentScreen){
+
+    case(HOME_SCREEN):
+      if(pressedButton == 0) shiftMenuLeft();
+      if(pressedButton == 1) shiftMenuRight();
+      if(pressedButton == 2) selectMenu();
+
+      switch (alien.getState())
+      {
       case STATE_IDLE:
         doBlink(currentTime);
-    }
-  
-  //DRAW SPRITE
-  if(currentTime - lastFrameTime > FRAME_RATE){
-    lastFrameTime = currentTime;
-    float jiggle = sin(currentTime * 0.004) * 3; //+-  2 pixels
-    // redraw background (to buffer)
-    canvas.drawRGBBitmap(0, 0, alien_home, SCREEN_WIDTH, SCREEN_HEIGHT);
+        break;
+      case STATE_EAT:
+        doEat(currentTime);
+        break;
+      case STATE_EXCERCISE:
+        doRun(currentTime);
+        break;
+      }
+      drawHome(currentTime);
 
-    alien.setY(center_y(SPRITE_HEIGHT) + (int)jiggle);
-    //redraw sprite (to buffer)
-    canvas.drawRGBBitmap(alien.getX(), alien.getY(), alien.getSprite(), SPRITE_WIDTH, SPRITE_HEIGHT);
-    //push buffer to screen
-    tft.drawRGBBitmap(0, 0, canvas.getBuffer(), SCREEN_WIDTH, SCREEN_HEIGHT - ICON_SIZE);
+      break;
   }
+
+  
 }

@@ -21,6 +21,7 @@ struct littleGuy {
     const uint16_t* getSprite();
     void setState(SPRITE_STATE s);
     void setSprite(const uint16_t* s);
+    SPRITE_STATE getState();
 };
 
 littleGuy& getPet();
