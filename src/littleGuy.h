@@ -12,6 +12,21 @@ struct littleGuy {
     int x;
     int y;
     const uint16_t* sprite;
+    int full; //out of 100
+    int happy; //out of 100
+    int energy; //out of 100
+
+    int getFull();
+    void plusFull(int amount);
+    void minusFull(int amount);
+
+    int getHappy();
+    void plusHappy(int amount);
+    void minusHappy(int amount);
+
+    int getEnergy();
+    void plusEnergy(int amount);
+    void minusEnergy(int amount);
 
     int getX();
     int getY();

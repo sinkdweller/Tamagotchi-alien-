@@ -35,7 +35,7 @@ void setup(void) {
   
   tft.begin();
   tft.fillScreen(BLACK);
-  alien = {STATE_IDLE, center_y(SPRITE_HEIGHT), center_x(SPRITE_WIDTH), alien_right_open};
+  alien = {STATE_IDLE, center_y(SPRITE_HEIGHT), center_x(SPRITE_WIDTH), alien_right_open, 50, 50, 50};
   tft.drawRGBBitmap(0, 0, alien_home, SCREEN_WIDTH, SCREEN_HEIGHT);
   
   // Parameters: (x, y, data, width, height)
@@ -49,7 +49,7 @@ enum SCREENS {
   STAT_SCEEN
 };
 SCREENS currentScreen = HOME_SCREEN;
-
+bool openMouth = false;
 
 void loop() {  
 
@@ -60,16 +60,19 @@ void loop() {
     case(HOME_SCREEN):
       if(pressedButton == 0) shiftMenuLeft();
       if(pressedButton == 1) shiftMenuRight();
-      if(pressedButton == 2) selectMenu();
-
+      if(pressedButton == 2) {
+        selectMenu();
+      }
       switch (alien.getState())
       {
       case STATE_IDLE:
         doBlink(currentTime);
         break;
-      case STATE_EAT:
-        doEat(currentTime);
+      case STATE_EAT: {
+        doEat(currentTime, (pressedButton == 2)); 
         break;
+
+      }
       case STATE_EXCERCISE:
         doRun(currentTime);
         break;

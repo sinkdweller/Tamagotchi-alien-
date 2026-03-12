@@ -6,9 +6,10 @@
 extern const uint16_t* currentSprite;
 
 extern littleGuy alien;  
-void doBlink(int currentTime);
-void doRun(int currentTime);
-void doEat(int currentTime);
-void doPoke(int currentTime);
-void doSleep(int currentTime);
+void doBlink(unsigned long currentTime);
+void doRun(unsigned long currentTime);
+void doEat(unsigned long currentTime, bool openMouth);
+void doPoke(unsigned long currentTime);
+void doSleep(unsigned long currentTime);
+
 #endif
