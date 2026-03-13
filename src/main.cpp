@@ -1,7 +1,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1351.h>
 #include <SPI.h>
-#include "actions.h"
+#include "animatables/actions.h"
+#include "animatables/foods.h"
 #include "sprites.h" // alien sprite data
 #include "backgrounds.h"
 #include "icons.h" //menu icon data
@@ -49,7 +50,6 @@ enum SCREENS {
   STAT_SCEEN
 };
 SCREENS currentScreen = HOME_SCREEN;
-bool openMouth = false;
 
 void loop() {  
 
@@ -60,15 +60,23 @@ void loop() {
     case(HOME_SCREEN):
       if(pressedButton == 0) shiftMenuLeft();
       if(pressedButton == 1) shiftMenuRight();
-      if(pressedButton == 2) {
-        selectMenu();
-      }
+      if(pressedButton == 2) selectMenu();
+      
       switch (alien.getState())
       {
       case STATE_IDLE:
         doBlink(currentTime);
         break;
       case STATE_EAT: {
+        if (pressedButton == 2 && (currentlyFlying == nullptr || !currentlyFlying->active)) {
+                currentlyFlying = &getRandomFood(); 
+          }
+
+            if (currentlyFlying != nullptr && currentlyFlying->active) {
+                // flyLeftToCenter handles the timer and moves the X
+                currentlyFlying->flyLeftToCenter(currentTime);
+            }
+
         doEat(currentTime, (pressedButton == 2)); 
         break;
 
@@ -77,6 +85,8 @@ void loop() {
         doRun(currentTime);
         break;
       }
+
+      //draws Alien and home
       drawHome(currentTime);
 
       break;

@@ -42,30 +42,9 @@ void doAnimation(unsigned long currentTime, Animation& anim){
         anim.frameState=0;
     }
 }
-//Setting alien sprite:
-//frame1 to set to for hold time
-//frame2 to revert to
 
-bool toggleAnimTimed(unsigned long currentTime, Animation& anim, bool flipFrameState, int holdTime){
-    const uint16_t* flipFrame = flipFrameState ? anim.frame1: anim.frame0;
-    //if not flipped, flip the first time
-    if(anim.frameState!=flipFrameState){
-        alien.setSprite(flipFrame);
-        anim.frameState = flipFrameState;
-        anim.lastToggleTime = currentTime;
-        return 1;
-    }
-    const uint16_t* initialFrame = flipFrameState ? anim.frame0: anim.frame1;
 
-    // revert after hold time
-    if(anim.frameState==flipFrameState && (currentTime - anim.lastToggleTime > holdTime)){
-        alien.setSprite(initialFrame);
-        anim.frameState = !flipFrameState;
-        return 0;
-    }
-
-}
-void doEat(unsigned long currentTime, bool buttonPressed) {
+bool doEat(unsigned long currentTime, bool buttonPressed) {
     static unsigned long eatStartTime = 0;
     static bool isEating = false;
 
@@ -73,21 +52,20 @@ void doEat(unsigned long currentTime, bool buttonPressed) {
         isEating = true;
         eatStartTime = currentTime;
         alien.setSprite(eatAnim.frame1); // OPEN MOUTH
-        Serial.println("OPEN");
     }
 
     if (isEating) {
-        // If 1 second passes, close it
+        // If 1 second passes, close 
         if (currentTime - eatStartTime >= 1000) {
             alien.setSprite(eatAnim.frame0); // CLOSED MOUTH
             isEating = false;
             Serial.println("CLOSED - TIMER DONE");
         }
     } else {
-        // This ensures if we aren't eating, we ARE closed.
-        // If your setSprite handles "same sprite" checks, this won't lag.
+        // if aren't eating,  closed.
         alien.setSprite(eatAnim.frame0); 
     }
+    return isEating;
 }
 void doRun(unsigned long currentTime){
     doAnimation(currentTime, runAnim);
