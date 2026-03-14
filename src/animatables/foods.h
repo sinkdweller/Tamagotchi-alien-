@@ -15,7 +15,7 @@ struct Food{
     int moveInterval; //millis/pixel
     unsigned long lastMoveTime;
     bool active;
-    bool flyLeftToCenter(unsigned long currentTime);
+    int flyLeftToCenter(unsigned long currentTime);
 };
 Food& getRandomFood();
 extern Food* currentlyFlying;

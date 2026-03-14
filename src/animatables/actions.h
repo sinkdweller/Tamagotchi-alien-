@@ -11,5 +11,6 @@ void doRun(unsigned long currentTime);
 bool doEat(unsigned long currentTime, bool openMouth);
 void doPoke(unsigned long currentTime);
 void doSleep(unsigned long currentTime);
-
+void openMouth();
+void closeMouth();
 #endif

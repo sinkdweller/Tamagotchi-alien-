@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
-
+#include "utils.h"
+#include "animatables/emote.h"
 enum SPRITE_STATE{ 
   STATE_IDLE,
   STATE_EAT,
@@ -15,7 +16,18 @@ struct littleGuy {
     int full; //out of 100
     int happy; //out of 100
     int energy; //out of 100
+    int annoy;
+    unsigned long lastAnnoyDecayTime;
+    Emote* currentEmote;
 
+    void drawEmote(int x, int y);
+    void setEmote(Emote& newEmote);
+
+    void drawGuy();
+    int getAnnoy(); 
+    void plusAnnoy(int amount);
+    void minusAnnoy(int amount);
+    void decayAnnoy(unsigned long currentTime);
     int getFull();
     void plusFull(int amount);
     void minusFull(int amount);

@@ -36,7 +36,7 @@ void setup(void) {
   
   tft.begin();
   tft.fillScreen(BLACK);
-  alien = {STATE_IDLE, center_y(SPRITE_HEIGHT), center_x(SPRITE_WIDTH), alien_right_open, 50, 50, 50};
+  alien = {STATE_IDLE, center_y(SPRITE_HEIGHT), center_x(SPRITE_WIDTH), alien_right_open, 50, 50, 50, 0, 0, nullptr};
   tft.drawRGBBitmap(0, 0, alien_home, SCREEN_WIDTH, SCREEN_HEIGHT);
   
   // Parameters: (x, y, data, width, height)
@@ -54,6 +54,7 @@ SCREENS currentScreen = HOME_SCREEN;
 void loop() {  
 
   unsigned long currentTime = millis();
+  drawBackground();
   int pressedButton = checkButtons(currentTime, 3);
   switch(currentScreen){
 
@@ -68,16 +69,28 @@ void loop() {
         doBlink(currentTime);
         break;
       case STATE_EAT: {
+        drawFood();
+        drawBar(center_x(40), 10, 40, 8, alien.getFull());
         if (pressedButton == 2 && (currentlyFlying == nullptr || !currentlyFlying->active)) {
                 currentlyFlying = &getRandomFood(); 
+                openMouth();
           }
 
             if (currentlyFlying != nullptr && currentlyFlying->active) {
                 // flyLeftToCenter handles the timer and moves the X
-                currentlyFlying->flyLeftToCenter(currentTime);
+                //-1: still flying, otherwise returns nutrition value
+                int addedNutrition = currentlyFlying->flyLeftToCenter(currentTime);
+                if(addedNutrition>0) {
+                  alien.plusFull(addedNutrition); 
+                  closeMouth();
+                  //trigger annoy emote if feed too much
+                  if(alien.getFull()==100) alien.plusAnnoy(10);
+                  if(alien.getAnnoy()>90 ) alien.setEmote(vein);
+                  else if(alien.getAnnoy()>60) alien.setEmote(sweat);
+                  else if(alien.getAnnoy() >20) alien.setEmote(err);
+                  Serial.println(alien.getFull());};
             }
 
-        doEat(currentTime, (pressedButton == 2)); 
         break;
 
       }

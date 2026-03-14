@@ -1,7 +1,7 @@
 #include "foods.h"
 
-Food burger = {burger_sprite, 25, SCREEN_WIDTH - 20, center_y(20), 20, 0, true};
-Food pill = {pill_sprite, 10, SCREEN_WIDTH-20, center_y(20), 30, 0, true};
+Food burger = {burger_sprite, 25, SCREEN_WIDTH - 20, center_y(20), 10, 0, true};
+Food pill = {pill_sprite, 10, SCREEN_WIDTH-20, center_y(20), 10, 0, true};
 
 Food foodMenu[] = {burger, pill};
 const int foodCount = 2;
@@ -23,7 +23,7 @@ Food& getRandomFood() {
     foodMenu[randomIndex].lastMoveTime = millis();
     return foodMenu[randomIndex];
 }
-bool Food::flyLeftToCenter(unsigned long currentTime){
+int Food::flyLeftToCenter(unsigned long currentTime){
     if(currentTime-lastMoveTime>moveInterval) {
         x-=1;
         lastMoveTime = currentTime;
@@ -33,8 +33,8 @@ bool Food::flyLeftToCenter(unsigned long currentTime){
     if(x <= sprite_center_x){
         active = false;
         currentlyFlying = nullptr;
-        return true;
+        return nutrition;
 
     }
-    return false; // Still flying
+    return -1; // Still flying
 }

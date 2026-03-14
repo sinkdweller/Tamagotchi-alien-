@@ -43,7 +43,13 @@ void doAnimation(unsigned long currentTime, Animation& anim){
     }
 }
 
-
+void openMouth(){
+    alien.setSprite(eatAnim.frame1);
+}
+void closeMouth(){
+    alien.setSprite(eatAnim.frame0);
+}
+//opens mouth when button pressed
 bool doEat(unsigned long currentTime, bool buttonPressed) {
     static unsigned long eatStartTime = 0;
     static bool isEating = false;
