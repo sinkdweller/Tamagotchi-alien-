@@ -26,7 +26,6 @@ Adafruit_SSD1351 tft = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, CS_PI
 
 GFXcanvas16 canvas(SCREEN_WIDTH, SCREEN_HEIGHT);
 SPRITE_STATE currentState;
-littleGuy alien;
 void setup(void) {
   Serial.begin(115200); // Use 115200 for ESP32
 
@@ -36,7 +35,10 @@ void setup(void) {
   
   tft.begin();
   tft.fillScreen(BLACK);
-  alien = {STATE_IDLE, center_y(SPRITE_HEIGHT), center_x(SPRITE_WIDTH), alien_right_open, 50, 50, 50, 0, 0, nullptr};
+
+  alien.setX(center_x(SPRITE_WIDTH));
+  alien.setY(center_x(SPRITE_HEIGHT));
+  alien.setSprite(alien_right_open);
   tft.drawRGBBitmap(0, 0, alien_home, SCREEN_WIDTH, SCREEN_HEIGHT);
   
   // Parameters: (x, y, data, width, height)
@@ -45,16 +47,14 @@ void setup(void) {
   Serial.println("Pet rendered!");
 }
 
-enum SCREENS {
-  HOME_SCREEN,
-  STAT_SCEEN
-};
+
 SCREENS currentScreen = HOME_SCREEN;
 
 void loop() {  
 
   unsigned long currentTime = millis();
   drawBackground();
+  alien.decayAnnoy(currentTime, 0);
   int pressedButton = checkButtons(currentTime, 3);
   switch(currentScreen){
 
@@ -71,6 +71,7 @@ void loop() {
       case STATE_EAT: {
         drawFood();
         drawBar(center_x(40), 10, 40, 8, alien.getFull());
+
         if (pressedButton == 2 && (currentlyFlying == nullptr || !currentlyFlying->active)) {
                 currentlyFlying = &getRandomFood(); 
                 openMouth();
@@ -83,8 +84,10 @@ void loop() {
                 if(addedNutrition>0) {
                   alien.plusFull(addedNutrition); 
                   closeMouth();
+                  Serial.println("annoy:");
+                  Serial.print(a)
                   //trigger annoy emote if feed too much
-                  if(alien.getFull()==100) alien.plusAnnoy(10);
+                  if(alien.getFull()==100) alien.plusAnnoy(20);
                   if(alien.getAnnoy()>90 ) alien.setEmote(vein);
                   else if(alien.getAnnoy()>60) alien.setEmote(sweat);
                   else if(alien.getAnnoy() >20) alien.setEmote(err);
@@ -99,7 +102,7 @@ void loop() {
         break;
       }
 
-      //draws Alien and home
+      //draws Alien and home stuff
       drawHome(currentTime);
 
       break;

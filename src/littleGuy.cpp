@@ -1,9 +1,28 @@
 // tamagotchi.cpp
 #include "littleGuy.h"
 
-static littleGuy pet; 
+littleGuy::littleGuy(
+    SPRITE_STATE state,
+    int x,
+    int y,
+    const uint16_t* sprite
+){
+    this->x = x;
+    this->y = y;
+    this->state = state;
+    this->sprite = sprite;
 
-littleGuy& getPet() { return pet; }
+    lastAnnoyDecayTime = 0;
+    lastHappyDecayTime = 0;
+    lastFullDecayTime = 0;
+    lastEnergyDecayTime = 0;
+
+    full = 50;
+    happy = 50;
+    energy = 50;
+    annoy = 0;
+}
+
 
 SPRITE_STATE littleGuy::getState(){return state;}
 void littleGuy::setState(SPRITE_STATE s) { state = s; }
@@ -68,9 +87,9 @@ void littleGuy::minusAnnoy(int amount){
     annoy -= amount;
     if(annoy < 0) annoy = 0;
 }
-void littleGuy::decayAnnoy(unsigned long currentTime){
+void littleGuy::decayAnnoy(unsigned long currentTime, int annoyAmount){
     if(currentTime - lastAnnoyDecayTime>1000){
-        minusAnnoy(5);
+        minusAnnoy(annoyAmount);
     }
 };
 void littleGuy::setEmote(Emote& newEmote){

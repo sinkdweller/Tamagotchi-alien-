@@ -18,27 +18,45 @@ struct littleGuy {
     int energy; //out of 100
     int annoy;
     unsigned long lastAnnoyDecayTime;
+    unsigned long lastHappyDecayTime;
+    unsigned long lastFullDecayTime;
+    unsigned long lastEnergyDecayTime;
+
+   
     Emote* currentEmote;
+
+    littleGuy(
+      SPRITE_STATE state,
+      int x,
+      int y,
+      const uint16_t* sprite
+    );
+
 
     void drawEmote(int x, int y);
     void setEmote(Emote& newEmote);
 
     void drawGuy();
+
     int getAnnoy(); 
     void plusAnnoy(int amount);
     void minusAnnoy(int amount);
-    void decayAnnoy(unsigned long currentTime);
+    void decayAnnoy(unsigned long currentTime,int annoyAmount);
+
     int getFull();
     void plusFull(int amount);
     void minusFull(int amount);
+    void decayFull(unsigned long currentTime);
 
     int getHappy();
     void plusHappy(int amount);
     void minusHappy(int amount);
+    void decayHappy(unsigned long currentTime);
 
     int getEnergy();
     void plusEnergy(int amount);
     void minusEnergy(int amount);
+    void decayEnergy(unsigned long currentTime);
 
     int getX();
     int getY();

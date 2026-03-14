@@ -5,6 +5,7 @@
 #include "utils.h"
 #include <Adafruit_SSD1351.h>
 #include "littleGuy.h"
+#include "globals.h"
 extern Adafruit_SSD1351 tft;
 extern littleGuy alien;
 void drawMenu();
