@@ -28,6 +28,11 @@ void littleGuy::minusHappy(int amount) {
     happy -= amount;
     if (happy < 0) happy = 0;
 }
+void littleGuy::decayHappy(unsigned long currentTime){
+    if(currentTime - lastHappyDecayTime>1000){
+        minusEnergy(5);
+    }
+};
 void littleGuy::plusEnergy(int amount){
     energy += amount;
     if(energy > 100) energy = 100;
@@ -36,6 +41,11 @@ void littleGuy::minusEnergy(int amount){
     energy += amount;
     if(energy < 0) energy = 0;
 }
+void littleGuy::decayEnergy(unsigned long currentTime){
+    if(currentTime - lastEnergyDecayTime>1000){
+        minusEnergy(5);
+    }
+};
 void littleGuy::plusFull(int amount){
     full+=amount;
     if(full>100) full = 100;
@@ -44,7 +54,11 @@ void littleGuy::minusFull(int amount){
     full -= amount;
     if(full < 0) full = 0;
 }
-
+void littleGuy::decayFull(unsigned long currentTime){
+    if(currentTime - lastFullDecayTime>1000){
+        minusFull(5);
+    }
+};
 void littleGuy::plusAnnoy(int amount){
     annoy += amount;
     if(annoy > 100) annoy = 100;
@@ -62,6 +76,7 @@ void littleGuy::decayAnnoy(unsigned long currentTime){
 void littleGuy::setEmote(Emote& newEmote){
     currentEmote = &newEmote;
 }
+
 void littleGuy::drawEmote(int x, int y) {
 
     if (currentEmote == nullptr) return;
