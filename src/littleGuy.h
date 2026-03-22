@@ -10,6 +10,7 @@ enum SPRITE_STATE{
 };
 struct littleGuy {
     SPRITE_STATE state;
+    int health;
     int x;
     int y;
     const uint16_t* sprite;
@@ -58,6 +59,7 @@ struct littleGuy {
     void minusEnergy(int amount);
     void decayEnergy(unsigned long currentTime);
 
+    int getHealth();
     int getX();
     int getY();
     int setXY(int x, int y);

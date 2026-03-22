@@ -4,6 +4,7 @@
 struct Animation{
     const uint16_t* frame0;
     const uint16_t* frame1;
+    
     int frame0Duration;
     int frame1Duration;
     bool frameState; //frame 1 or 2.
@@ -20,9 +21,36 @@ Animation eatAnim{
     0,
     0
 };
+Animation eatSickAnim{
+    alien_eat_sick_0, //mouth closed
+    alien_eat_sick_1, //mouth closed
+    1000,
+    1000,
+    1,
+    0,
+    0
+};
+Animation sickAnim{
+    alien_sick_0,
+    alien_sick_1,
+    700,
+    700,
+    1,
+    0,
+    0
+};  
 Animation runAnim{
     alien_running_0,
     alien_running_1,
+    700,
+    700,
+    1,
+    0,
+    0
+};
+Animation runSickAnim{
+    alien_running_sick_0,
+    alien_running_sick_1,
     700,
     700,
     1,
@@ -42,41 +70,23 @@ void doAnimation(unsigned long currentTime, Animation& anim){
         anim.frameState=0;
     }
 }
-
+void sickIdle(unsigned long currentTime){
+    doAnimation(currentTime, sickAnim);
+}
 void openMouth(){
-    alien.setSprite(eatAnim.frame1);
-}
+    if(alien.getHealth()>50) alien.setSprite(eatAnim.frame1);
+    else alien.setSprite(eatSickAnim.frame1);
+}  
 void closeMouth(){
-    alien.setSprite(eatAnim.frame0);
+    if(alien.getHealth()>50) alien.setSprite(eatAnim.frame0);
+    else alien.setSprite(eatSickAnim.frame0);
 }
-//opens mouth when button pressed
-bool doEat(unsigned long currentTime, bool buttonPressed) {
-    static unsigned long eatStartTime = 0;
-    static bool isEating = false;
 
-    if (buttonPressed && !isEating) {
-        isEating = true;
-        eatStartTime = currentTime;
-        alien.setSprite(eatAnim.frame1); // OPEN MOUTH
-    }
-
-    if (isEating) {
-        // If 1 second passes, close 
-        if (currentTime - eatStartTime >= 1000) {
-            alien.setSprite(eatAnim.frame0); // CLOSED MOUTH
-            isEating = false;
-            Serial.println("CLOSED - TIMER DONE");
-        }
-    } else {
-        // if aren't eating,  closed.
-        alien.setSprite(eatAnim.frame0); 
-    }
-    return isEating;
-}
 void doRun(unsigned long currentTime){
-    doAnimation(currentTime, runAnim);
-
+    if(alien.getHealth()>50)doAnimation(currentTime, runAnim);
+    else doAnimation(currentTime, runSickAnim);
 }
+
 //put this with animation struct later...
 const int BLINK_DURATION = 200;
 unsigned long lastBlinkTime = 0;
@@ -98,3 +108,8 @@ void doBlink(unsigned long currentTime){
   }
 }
 
+void doIdle(unsigned long currentTime){
+    if(alien.getHealth()>50){
+        doBlink(currentTime);
+    }else sickIdle(currentTime);
+}

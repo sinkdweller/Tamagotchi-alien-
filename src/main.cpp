@@ -54,7 +54,7 @@ void loop() {
 
   unsigned long currentTime = millis();
   drawBackground();
-  alien.decayAnnoy(currentTime, 0);
+  alien.decayAnnoy(currentTime, 5);
   int pressedButton = checkButtons(currentTime, 3);
   switch(currentScreen){
 
@@ -66,7 +66,7 @@ void loop() {
       switch (alien.getState())
       {
       case STATE_IDLE:
-        doBlink(currentTime);
+        doIdle(currentTime);
         break;
       case STATE_EAT: {
         drawFood();
@@ -84,8 +84,8 @@ void loop() {
                 if(addedNutrition>0) {
                   alien.plusFull(addedNutrition); 
                   closeMouth();
-                  Serial.println("annoy:");
-                  Serial.print(a)
+                  Serial.println("annoy: ");
+                  Serial.print(alien.getAnnoy());
                   //trigger annoy emote if feed too much
                   if(alien.getFull()==100) alien.plusAnnoy(20);
                   if(alien.getAnnoy()>90 ) alien.setEmote(vein);

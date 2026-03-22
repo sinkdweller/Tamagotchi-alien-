@@ -4,18 +4,17 @@ void drawBar(int x, int y, int barWidth, int barHeight, int statValue) {
     //int barHeight = 8;
     int maxStatValue = 100;
 
-    // 1. Draw the outline/background
+    // Draw the outline/background
     canvas.drawRect(x, y, barWidth, barHeight, 0xFFFF); // White border
 
-    // 2. Calculate fill width
-    // We use map() for easy scaling: (value, low_in, high_in, low_out, high_out)
+    // Calculate fill width
     int fillWidth = map(statValue, 0, maxStatValue, 0, barWidth - 2);
 
-    // 3. Choose color based on how hungry the pet is
+    // Choose color based on how hungry the pet is
     uint16_t barColor = 0x07E0; // Green
     if (statValue < 30) barColor = 0xF800; // Red if starving
 
-    // 4. Draw the fill (offset by 1 to stay inside the border)
+    // Draw the fill
     canvas.fillRect(x + 1, y + 1, fillWidth, barHeight - 2, barColor);
 }
 void drawBackground(){

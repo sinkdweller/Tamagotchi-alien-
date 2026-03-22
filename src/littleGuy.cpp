@@ -11,7 +11,7 @@ littleGuy::littleGuy(
     this->y = y;
     this->state = state;
     this->sprite = sprite;
-
+    health = 30; //out of 100
     lastAnnoyDecayTime = 0;
     lastHappyDecayTime = 0;
     lastFullDecayTime = 0;
@@ -31,6 +31,7 @@ void littleGuy::setX(int newX){ this->x = newX;}
 void littleGuy::setY(int newY){ this->y = newY;}
 int littleGuy::getX(){return x;}
 int littleGuy::getY(){return y;}
+int littleGuy::getHealth(){return health;}
 const uint16_t* littleGuy::getSprite(){return sprite;}
 
 int littleGuy::getFull(){return full;}
@@ -49,6 +50,7 @@ void littleGuy::minusHappy(int amount) {
 }
 void littleGuy::decayHappy(unsigned long currentTime){
     if(currentTime - lastHappyDecayTime>1000){
+        lastHappyDecayTime=currentTime;
         minusEnergy(5);
     }
 };
@@ -62,6 +64,7 @@ void littleGuy::minusEnergy(int amount){
 }
 void littleGuy::decayEnergy(unsigned long currentTime){
     if(currentTime - lastEnergyDecayTime>1000){
+        lastEnergyDecayTime = currentTime;
         minusEnergy(5);
     }
 };
@@ -75,6 +78,7 @@ void littleGuy::minusFull(int amount){
 }
 void littleGuy::decayFull(unsigned long currentTime){
     if(currentTime - lastFullDecayTime>1000){
+        lastFullDecayTime = currentTime;
         minusFull(5);
     }
 };
@@ -89,6 +93,7 @@ void littleGuy::minusAnnoy(int amount){
 }
 void littleGuy::decayAnnoy(unsigned long currentTime, int annoyAmount){
     if(currentTime - lastAnnoyDecayTime>1000){
+        lastAnnoyDecayTime=currentTime;
         minusAnnoy(annoyAmount);
     }
 };
