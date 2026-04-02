@@ -5,7 +5,8 @@
 #include <Arduino.h>
 extern const uint16_t* currentSprite;
 
-extern littleGuy alien;  
+extern littleGuy alien;
+//Sick idles/animations are automatically managed here
 void doIdle(unsigned long currentTime);
 void doRun(unsigned long currentTime);
 void doPoke(unsigned long currentTime);

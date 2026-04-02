@@ -5,13 +5,14 @@ littleGuy::littleGuy(
     SPRITE_STATE state,
     int x,
     int y,
-    const uint16_t* sprite
+    const uint16_t* sprite,
+    int health
 ){
     this->x = x;
     this->y = y;
     this->state = state;
     this->sprite = sprite;
-    health = 30; //out of 100
+    this->health = health; //out of 100
     lastAnnoyDecayTime = 0;
     lastHappyDecayTime = 0;
     lastFullDecayTime = 0;
@@ -27,11 +28,12 @@ littleGuy::littleGuy(
 SPRITE_STATE littleGuy::getState(){return state;}
 void littleGuy::setState(SPRITE_STATE s) { state = s; }
 void littleGuy::setSprite(const uint16_t* s) { sprite = s; }
-void littleGuy::setX(int newX){ this->x = newX;}
-void littleGuy::setY(int newY){ this->y = newY;}
+void littleGuy::setX(int newX){ x = newX;}
+void littleGuy::setY(int newY){ y = newY;}
 int littleGuy::getX(){return x;}
 int littleGuy::getY(){return y;}
 int littleGuy::getHealth(){return health;}
+void littleGuy::setHealth(int health){health = health; }
 const uint16_t* littleGuy::getSprite(){return sprite;}
 
 int littleGuy::getFull(){return full;}
@@ -97,8 +99,8 @@ void littleGuy::decayAnnoy(unsigned long currentTime, int annoyAmount){
         minusAnnoy(annoyAmount);
     }
 };
-void littleGuy::setEmote(Emote& newEmote){
-    currentEmote = &newEmote;
+void littleGuy::setEmote(Emote* newEmote){
+    currentEmote = newEmote;
 }
 
 void littleGuy::drawEmote(int x, int y) {

@@ -12,8 +12,7 @@ struct Emote{
     int duration;
 };
 
-extern Emote* currentEmote;
+extern Emote* currentEmote; //defined in sprites.cpp and set in main
 extern Emote vein;
 extern Emote sweat;
 extern Emote err;
-void drawEmote(int x, int y); //draws currentEmote on top of alien;

@@ -13,6 +13,7 @@
 #include "littleGuy.h"
 #include "home_screen/drawHome.h"
 #include "globals.h"
+#include "system/time_manager.h"
 #define DC_PIN   2
 #define CS_PIN   5   
 #define RST_PIN  4
@@ -35,10 +36,11 @@ void setup(void) {
   
   tft.begin();
   tft.fillScreen(BLACK);
-
+  
   alien.setX(center_x(SPRITE_WIDTH));
-  alien.setY(center_x(SPRITE_HEIGHT));
+  alien.setY(center_y(SPRITE_HEIGHT));
   alien.setSprite(alien_right_open);
+  alien.setHealth(100);
   tft.drawRGBBitmap(0, 0, alien_home, SCREEN_WIDTH, SCREEN_HEIGHT);
   
   // Parameters: (x, y, data, width, height)
@@ -52,9 +54,10 @@ SCREENS currentScreen = HOME_SCREEN;
 
 void loop() {  
 
-  unsigned long currentTime = millis();
+  unsigned long currentTime = getTime();
   drawBackground();
   alien.decayAnnoy(currentTime, 5);
+  if(alien.getAnnoy()==0) alien.setEmote(nullptr);
   int pressedButton = checkButtons(currentTime, 3);
   switch(currentScreen){
 
@@ -67,6 +70,12 @@ void loop() {
       {
       case STATE_IDLE:
         doIdle(currentTime);
+        if(pressedButton == 2) {
+          doPoke(currentTime);
+          //debugging
+          Serial.println("alien health: ");
+          Serial.print(alien.getHealth());
+        }
         break;
       case STATE_EAT: {
         drawFood();
@@ -88,10 +97,11 @@ void loop() {
                   Serial.print(alien.getAnnoy());
                   //trigger annoy emote if feed too much
                   if(alien.getFull()==100) alien.plusAnnoy(20);
-                  if(alien.getAnnoy()>90 ) alien.setEmote(vein);
-                  else if(alien.getAnnoy()>60) alien.setEmote(sweat);
-                  else if(alien.getAnnoy() >20) alien.setEmote(err);
-                  Serial.println(alien.getFull());};
+                  if(alien.getAnnoy()>90 ) alien.setEmote(&vein);
+                  else if(alien.getAnnoy()>60) alien.setEmote(&sweat);
+                  else if(alien.getAnnoy() >20) alien.setEmote(&err);
+                  Serial.println(alien.getFull());
+                };
             }
 
         break;

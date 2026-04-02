@@ -30,12 +30,13 @@ struct littleGuy {
       SPRITE_STATE state,
       int x,
       int y,
-      const uint16_t* sprite
+      const uint16_t* sprite,
+      int health
     );
 
 
     void drawEmote(int x, int y);
-    void setEmote(Emote& newEmote);
+    void setEmote(Emote* newEmote);
 
     void drawGuy();
 
@@ -60,6 +61,7 @@ struct littleGuy {
     void decayEnergy(unsigned long currentTime);
 
     int getHealth();
+    void setHealth(int health);
     int getX();
     int getY();
     int setXY(int x, int y);

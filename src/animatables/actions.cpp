@@ -1,5 +1,7 @@
 
 #include "actions.h"
+int SICK_HEALTH = 50;
+
 //two frame animations
 struct Animation{
     const uint16_t* frame0;
@@ -11,6 +13,15 @@ struct Animation{
     int nextInterval;
     int lastToggleTime;
 
+};
+Animation happyAnim{
+    alien_happy_0,
+    alien_happy_1,
+    700,
+    700,
+    1,
+    0,
+    0
 };
 Animation eatAnim{
     alien_eating_0, //mouth closed
@@ -70,23 +81,26 @@ void doAnimation(unsigned long currentTime, Animation& anim){
         anim.frameState=0;
     }
 }
-void sickIdle(unsigned long currentTime){
-    doAnimation(currentTime, sickAnim);
-}
+
+//ACTIONS
 void openMouth(){
-    if(alien.getHealth()>50) alien.setSprite(eatAnim.frame1);
+    if(alien.getHealth()>SICK_HEALTH) alien.setSprite(eatAnim.frame1);
     else alien.setSprite(eatSickAnim.frame1);
 }  
 void closeMouth(){
-    if(alien.getHealth()>50) alien.setSprite(eatAnim.frame0);
+    if(alien.getHealth()>SICK_HEALTH) alien.setSprite(eatAnim.frame0);
     else alien.setSprite(eatSickAnim.frame0);
 }
 
 void doRun(unsigned long currentTime){
-    if(alien.getHealth()>50)doAnimation(currentTime, runAnim);
+    if(alien.getHealth()>SICK_HEALTH)doAnimation(currentTime, runAnim);
     else doAnimation(currentTime, runSickAnim);
 }
 
+//IDLES
+void sickIdle(unsigned long currentTime){
+    doAnimation(currentTime, sickAnim);
+}
 //put this with animation struct later...
 const int BLINK_DURATION = 200;
 unsigned long lastBlinkTime = 0;
@@ -109,7 +123,17 @@ void doBlink(unsigned long currentTime){
 }
 
 void doIdle(unsigned long currentTime){
-    if(alien.getHealth()>50){
+    if(alien.getHealth()>SICK_HEALTH){
         doBlink(currentTime);
     }else sickIdle(currentTime);
 }
+
+void doSleep(unsigned long currentTime){
+    if(alien.getHealth()>SICK_HEALTH) alien.setSprite(alien_right_blink);
+    else alien.setSprite(alien_sick_0);
+};
+
+void doPoke(unsigned long currentTime){
+    if(alien.getHealth()>SICK_HEALTH && alien.getHappy()>50) doAnimation(currentTime, happyAnim);
+};
+
