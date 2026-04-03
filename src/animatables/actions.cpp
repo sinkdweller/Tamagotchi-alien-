@@ -1,6 +1,5 @@
 
 #include "actions.h"
-int SICK_HEALTH = 50;
 
 //two frame animations
 struct Animation{
@@ -84,16 +83,16 @@ void doAnimation(unsigned long currentTime, Animation& anim){
 
 //ACTIONS
 void openMouth(){
-    if(alien.getHealth()>SICK_HEALTH) alien.setSprite(eatAnim.frame1);
+    if(!alien.isSick) alien.setSprite(eatAnim.frame1);
     else alien.setSprite(eatSickAnim.frame1);
 }  
 void closeMouth(){
-    if(alien.getHealth()>SICK_HEALTH) alien.setSprite(eatAnim.frame0);
+    if(!alien.isSick) alien.setSprite(eatAnim.frame0);
     else alien.setSprite(eatSickAnim.frame0);
 }
 
 void doRun(unsigned long currentTime){
-    if(alien.getHealth()>SICK_HEALTH)doAnimation(currentTime, runAnim);
+    if(!alien.isSick)doAnimation(currentTime, runAnim);
     else doAnimation(currentTime, runSickAnim);
 }
 
@@ -123,17 +122,19 @@ void doBlink(unsigned long currentTime){
 }
 
 void doIdle(unsigned long currentTime){
-    if(alien.getHealth()>SICK_HEALTH){
+    if(!alien.isSick){
         doBlink(currentTime);
     }else sickIdle(currentTime);
 }
 
 void doSleep(unsigned long currentTime){
-    if(alien.getHealth()>SICK_HEALTH) alien.setSprite(alien_right_blink);
-    else alien.setSprite(alien_sick_0);
+    if(!alien.isSick){
+        alien.setSprite(alien_right_blink);
+    }
+    else {alien.setSprite(alien_sick_0);}
 };
 
 void doPoke(unsigned long currentTime){
-    if(alien.getHealth()>SICK_HEALTH && alien.getHappy()>50) doAnimation(currentTime, happyAnim);
+    if(!alien.isSick && alien.getHappy()>50) doAnimation(currentTime, happyAnim);
 };
 

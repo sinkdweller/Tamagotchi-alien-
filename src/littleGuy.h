@@ -18,7 +18,6 @@ struct Stats{
 
 struct littleGuy {
     SPRITE_STATE state;
-    int health;
     int x;
     int y;
     const uint16_t* sprite;
@@ -30,10 +29,9 @@ struct littleGuy {
       SPRITE_STATE state,
       int x,
       int y,
-      const uint16_t* sprite,
-      int health
+      const uint16_t* sprite
     );
-
+    bool isSick;
 
     void drawEmote(int x, int y);
     void setEmote(Emote* newEmote);
@@ -54,22 +52,24 @@ struct littleGuy {
 
     //STATS GETTERS/SETTERS
     int getAnnoy(); 
-    void plusAnnoy(int amount);
-    void minusAnnoy(int amount);
+    void plusAnnoy(float amount);
+    void minusAnnoy(float amount);
 
     int getFull();
-    void plusFull(int amount);
-    void minusFull(int amount);
+    void plusFull(float amount);
+    void minusFull(float amount);
 
     int getHappy();
-    void plusHappy(int amount);
-    void minusHappy(int amount);
+    void plusHappy(float amount);
+    void minusHappy(float);
 
     int getEnergy();
-    void plusEnergy(int amount);
-    void minusEnergy(int amount);
+    void plusEnergy(float amount);
+    void minusEnergy(float);
 
     int getHealth();
+    void minusHealth(float amount);
+    void plusHealth(float amount);
     void setHealth(int health);
     
 };

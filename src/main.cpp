@@ -55,10 +55,12 @@ unsigned long last_tick = 0;
 void loop() {  
 
   unsigned long currentTime = getTime();
+  //for stats, uses time scale for debugging
+  unsigned long systemTime = getSystemTime();
   //decay stats
-  if(currentTime - last_tick > TICK_INTERVAL){
-    alien.decayStats(currentTime - last_tick);
-    last_tick = currentTime;
+  if(systemTime - last_tick > TICK_INTERVAL){
+    alien.decayStats(systemTime - last_tick);
+    last_tick = systemTime;
   }
   drawBackground();
   if(alien.getAnnoy()==0) alien.setEmote(nullptr);
@@ -77,14 +79,14 @@ void loop() {
         if(pressedButton == 2) {
           doPoke(currentTime);
           //debugging
-          Serial.println("alien health: ");
-          Serial.print(alien.getHealth());
-          Serial.println("alien annoy: ");
-          Serial.print(alien.getAnnoy());
-          Serial.println("alien full: ");
-          Serial.print(alien.getFull());
-          Serial.println("alien energy: ");
-          Serial.print(alien.getEnergy());
+          Serial.print("alien health: ");
+          Serial.println(alien.getHealth());
+          Serial.print("alien annoy: ");
+          Serial.println(alien.getAnnoy());
+          Serial.print("alien full: ");
+          Serial.println(alien.getFull());
+          Serial.print("alien energy: ");
+          Serial.println(alien.getEnergy());
         }
         break;
       case STATE_EAT: {
@@ -103,12 +105,14 @@ void loop() {
                 if(addedNutrition>0) {
                   alien.plusFull(addedNutrition); 
                   closeMouth();
-                  Serial.println("annoy: ");
-                  Serial.print(alien.getAnnoy());
+                  Serial.print("annoy: ");
+                  Serial.println(alien.getAnnoy());
+                  Serial.print("full: ");
+                  Serial.println(alien.getFull());
                   //trigger annoy emote if feed too much
-                  if(alien.getFull()==100) alien.plusAnnoy(20);
-                  if(alien.getAnnoy()>90 ) alien.setEmote(&vein);
-                  else if(alien.getAnnoy()>60) alien.setEmote(&sweat);
+                  if(alien.getFull()>95) alien.plusAnnoy(20);
+                  if(alien.getAnnoy()>80 ) alien.setEmote(&vein);
+                  else if(alien.getAnnoy()>50) alien.setEmote(&sweat);
                   else if(alien.getAnnoy() >20) alien.setEmote(&err);
                   Serial.println(alien.getFull());
                 };
@@ -119,6 +123,9 @@ void loop() {
       }
       case STATE_EXCERCISE:
         doRun(currentTime);
+        break;
+      case STATE_SLEEP:
+        doSleep(currentTime);
         break;
       }
 
