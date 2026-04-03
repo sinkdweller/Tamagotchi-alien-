@@ -13,4 +13,6 @@
 #define RST_PIN 4
 
 // Timing
-const int FRAME_RATE = 50;
+#define FRAME_RATE 50
+#define TICK_INTERVAL 5000 //three seconds
+#define TIME_SCALE 10

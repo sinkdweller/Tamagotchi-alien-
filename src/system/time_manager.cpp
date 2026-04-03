@@ -1,11 +1,10 @@
 
 #include "time_manager.h"
 #include <Arduino.h>
-
-float timeScale = 1;
+#include "constants.h"
 unsigned long getTime(){
-    return millis() * timeScale;
+    return millis() * TIME_SCALE;
 }
-void setTimeScale(float scale){
-    timeScale = scale;
-}
+// void setTimeScale(float scale){
+//     timeScale = scale;
+// }

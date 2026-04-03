@@ -51,12 +51,16 @@ void setup(void) {
 
 
 SCREENS currentScreen = HOME_SCREEN;
-
+unsigned long last_tick = 0;
 void loop() {  
 
   unsigned long currentTime = getTime();
+  //decay stats
+  if(currentTime - last_tick > TICK_INTERVAL){
+    alien.decayStats(currentTime - last_tick);
+    last_tick = currentTime;
+  }
   drawBackground();
-  alien.decayAnnoy(currentTime, 5);
   if(alien.getAnnoy()==0) alien.setEmote(nullptr);
   int pressedButton = checkButtons(currentTime, 3);
   switch(currentScreen){
@@ -75,6 +79,12 @@ void loop() {
           //debugging
           Serial.println("alien health: ");
           Serial.print(alien.getHealth());
+          Serial.println("alien annoy: ");
+          Serial.print(alien.getAnnoy());
+          Serial.println("alien full: ");
+          Serial.print(alien.getFull());
+          Serial.println("alien energy: ");
+          Serial.print(alien.getEnergy());
         }
         break;
       case STATE_EAT: {
