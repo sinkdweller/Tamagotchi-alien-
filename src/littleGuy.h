@@ -9,11 +9,11 @@ enum SPRITE_STATE{
   STATE_EXCERCISE
 };
 struct Stats{
-  int full;
-  int happy;
-  int energy;
-  int annoy;
-  int health;
+  float full;
+  float happy;
+  float energy;
+  float annoy;
+  float health;
 };
 
 struct littleGuy {
@@ -54,25 +54,27 @@ struct littleGuy {
     float happyRate;
     float energyRate;
     float annoyRate;
+    float healthRate;
 
     void setFullRate(float amount);
     void setHappyRate(float amount);
     void setEnergyRate(float amount);
     void setAnnoyRate(float amount);
+    void setHealthRate(float amount);
     //STATS GETTERS/SETTERS
-    int getAnnoy(); 
+    float getAnnoy(); 
     void plusAnnoy(float amount);
 
-    int getFull();
+    float getFull();
     void plusFull(float amount);
 
-    int getHappy();
+    float getHappy();
     void plusHappy(float amount);
 
-    int getEnergy();
+    float getEnergy();
     void plusEnergy(float amount);
 
-    int getHealth();
+    float getHealth();
     void plusHealth(float amount);
     void setHealth(int health);
     

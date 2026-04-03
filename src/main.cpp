@@ -57,11 +57,13 @@ void loop() {
   unsigned long currentTime = getTime();
   //for stats, uses time scale for debugging
   unsigned long systemTime = getSystemTime();
-  //decay stats
-  if(systemTime - last_tick > TICK_INTERVAL){
-    alien.updateStats(systemTime - last_tick);
-    last_tick = systemTime;
-  }
+  //base decay stats
+  alien.setFullRate(-0.001);
+  alien.setEnergyRate(-0.001);
+  alien.setHappyRate(-0.001);
+  alien.setAnnoyRate(0.001);
+  alien.setHealthRate(0);
+
   drawBackground();
   if(alien.getAnnoy()==0) alien.setEmote(nullptr);
   int pressedButton = checkButtons(currentTime, 3);
@@ -122,16 +124,31 @@ void loop() {
 
       }
       case STATE_EXCERCISE:
+        alien.setEnergyRate(-0.005);
+        alien.setHappyRate(0.005);
         doRun(currentTime);
         break;
       case STATE_SLEEP:
+        alien.setEnergyRate(0.005);
+        alien.setHappyRate(0.005);
+        if(pressedButton == 2){
+            Serial.print("energy: ");
+            Serial.println(alien.getEnergy());
+            Serial.print("happy: ");
+            Serial.println(alien.getHappy());
+
+
+        }
         doSleep(currentTime);
         break;
       }
 
       //draws Alien and home stuff
       drawHome(currentTime);
-
+      if(systemTime - last_tick > TICK_INTERVAL){
+        alien.updateStats(systemTime - last_tick);
+        last_tick = systemTime;
+      }
       break;
   }
 

@@ -22,6 +22,7 @@ littleGuy::littleGuy(
     this->energyRate = -0.001;
     this->happyRate = -0.001;
     this->annoyRate = -1;
+    this->healthRate = 0;
 }
 
 
@@ -32,7 +33,7 @@ void littleGuy::setX(int newX){ x = newX;}
 void littleGuy::setY(int newY){ y = newY;}
 int littleGuy::getX(){return x;}
 int littleGuy::getY(){return y;}
-int littleGuy::getHealth(){return stats.health;}
+float littleGuy::getHealth(){return stats.health;}
 void littleGuy::setHealth(int newHealth){stats.health = newHealth; }
 const uint16_t* littleGuy::getSprite(){return sprite;}
 
@@ -42,16 +43,23 @@ void littleGuy::updateStats(unsigned long deltaMs){
     plusFull(dt*fullRate);
     plusEnergy(dt*energyRate);
     plusAnnoy(dt*annoyRate);
+    plusHealth(dt*healthRate);
 
     if(stats.full < 10) plusHealth(dt*-0.001);
     if(stats.happy < 10) plusHealth(dt*-0.001);
     if(stats.health < 50) isSick = true;
 
 }
-int littleGuy::getFull(){return (int) stats.full;}
-int littleGuy::getHappy(){return  (int) stats.happy;}
-int littleGuy::getEnergy(){return  (int) stats.energy;}
-int littleGuy::getAnnoy(){return  (int) stats.annoy;}
+void littleGuy::setFullRate(float amount){fullRate = amount;}
+void littleGuy::setHappyRate(float amount){happyRate = amount;}
+void littleGuy::setEnergyRate(float amount){energyRate = amount;}
+void littleGuy::setAnnoyRate(float amount){annoyRate = amount;}
+void littleGuy::setHealthRate(float amount){healthRate = amount;}
+
+float littleGuy::getFull(){return stats.full;}
+float littleGuy::getHappy(){return  stats.happy;}
+float littleGuy::getEnergy(){return  stats.energy;}
+float littleGuy::getAnnoy(){return  stats.annoy;}
 
 void littleGuy::plusHealth(float amount) {
     stats.health += amount;
@@ -62,7 +70,7 @@ void littleGuy::plusHealth(float amount) {
 void littleGuy::plusHappy(float amount) {
     stats.happy += amount;
     if (stats.happy > 100) stats.happy = 100;
-    if (stats.health < 0) stats.health = 0;
+    if (stats.happy < 0) stats.happy = 0;
 }
 
 
@@ -81,14 +89,12 @@ void littleGuy::plusFull(float amount){
 
 }
 
-
 void littleGuy::plusAnnoy(float amount){
     stats.annoy += amount;
     if(stats.annoy > 100) stats.annoy = 100;
     if(stats.annoy < 0) stats.annoy = 0;
 
 }
-
 
 void littleGuy::setEmote(Emote* newEmote){
     currentEmote = newEmote;
