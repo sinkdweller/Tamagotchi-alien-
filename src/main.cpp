@@ -59,7 +59,7 @@ void loop() {
   unsigned long systemTime = getSystemTime();
   //decay stats
   if(systemTime - last_tick > TICK_INTERVAL){
-    alien.decayStats(systemTime - last_tick);
+    alien.updateStats(systemTime - last_tick);
     last_tick = systemTime;
   }
   drawBackground();

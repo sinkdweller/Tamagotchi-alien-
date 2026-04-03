@@ -48,27 +48,31 @@ struct littleGuy {
     void setSprite(const uint16_t* s);
     SPRITE_STATE getState();
     //STATS DECAY METHOD
-    void decayStats(unsigned long deltaMs);
+    void updateStats(unsigned long deltaMs);
 
+    float fullRate;
+    float happyRate;
+    float energyRate;
+    float annoyRate;
+
+    void setFullRate(float amount);
+    void setHappyRate(float amount);
+    void setEnergyRate(float amount);
+    void setAnnoyRate(float amount);
     //STATS GETTERS/SETTERS
     int getAnnoy(); 
     void plusAnnoy(float amount);
-    void minusAnnoy(float amount);
 
     int getFull();
     void plusFull(float amount);
-    void minusFull(float amount);
 
     int getHappy();
     void plusHappy(float amount);
-    void minusHappy(float);
 
     int getEnergy();
     void plusEnergy(float amount);
-    void minusEnergy(float);
 
     int getHealth();
-    void minusHealth(float amount);
     void plusHealth(float amount);
     void setHealth(int health);
     
