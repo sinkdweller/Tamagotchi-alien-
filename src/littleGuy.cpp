@@ -1,4 +1,3 @@
-// tamagotchi.cpp
 #include "littleGuy.h"
 
 littleGuy::littleGuy(
@@ -47,7 +46,15 @@ void littleGuy::updateStats(unsigned long deltaMs){
 
     if(stats.full < 10) plusHealth(dt*-0.001);
     if(stats.happy < 10) plusHealth(dt*-0.001);
-    if(stats.health < 50) isSick = true;
+    //recovery
+    if(stats.full > 40){
+        //Bonus boost if happy or high energy
+        if(stats.happy > 50) plusHealth(dt*0.003);
+        if(stats.energy > 40) plusHealth(dt*0.003);
+
+        plusHealth(dt*0.001);
+    };
+    isSick = (stats.health<50);
 
 }
 void littleGuy::setFullRate(float amount){fullRate = amount;}

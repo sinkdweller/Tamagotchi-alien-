@@ -15,4 +15,4 @@
 // Timing
 #define FRAME_RATE 50
 #define TICK_INTERVAL 5000 //three seconds
-#define TIME_SCALE 10
+#define TIME_SCALE 120 //one hour = 30 seconds or one day = 12 minutes

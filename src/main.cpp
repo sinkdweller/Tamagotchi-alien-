@@ -58,10 +58,10 @@ void loop() {
   //for stats, uses time scale for debugging
   unsigned long systemTime = getSystemTime();
   //base decay stats
-  alien.setFullRate(-0.001);
-  alien.setEnergyRate(-0.001);
-  alien.setHappyRate(-0.001);
-  alien.setAnnoyRate(0.001);
+  alien.setFullRate(-0.003);
+  alien.setEnergyRate(-0.002);
+  alien.setHappyRate(-0.002);
+  alien.setAnnoyRate(-3);
   alien.setHealthRate(0);
 
   drawBackground();
