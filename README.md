@@ -24,6 +24,7 @@ Take care of pocketman... take care of yourself
 ## Features
 
 ### Core Gameplay
+Demo video: https://drive.google.com/file/d/1w21cXE1AYyK_mNx-YlUV7lJ-Xb0EH9oe/view?usp=sharing
 - **Hunger System**
   - Pocket Man gets hungry over time
   - Manually feed it with a small minigame using animated food interactions
